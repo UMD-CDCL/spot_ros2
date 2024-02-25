@@ -39,7 +39,12 @@ namespace spot_ros2::images {
       image_request->set_image_source_name(source_name);
       // RGB images can have a user-configurable image quality setting.
       image_request->set_quality_percent(rgb_image_quality);
-      image_request->set_pixel_format(bosdyn::api::Image_PixelFormat_PIXEL_FORMAT_RGB_U8);
+      //image_request->set_pixel_format(bosdyn::api::Image_PixelFormat_PIXEL_FORMAT_RGB_U8);
+      if (source.camera == SpotCamera::HAND) {
+        image_request->set_pixel_format(bosdyn::api::Image_PixelFormat_PIXEL_FORMAT_RGB_U8);
+      } else {
+        image_request->set_pixel_format(has_rgb_cameras ? bosdyn::api::Image_PixelFormat_PIXEL_FORMAT_RGB_U8 : bosdyn::api::Image_PixelFormat_PIXEL_FORMAT_GREYSCALE_U8);
+      }
       // RGB images can be either raw or JPEG-compressed.
       image_request->set_image_format(get_raw_rgb_images ? bosdyn::api::Image_Format_FORMAT_RAW
                                                          : bosdyn::api::Image_Format_FORMAT_JPEG);
