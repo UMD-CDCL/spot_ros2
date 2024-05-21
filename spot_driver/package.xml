@@ -14,7 +14,7 @@
   <depend>bdai_ros2_wrappers</depend>
   <depend>bosdyn</depend>
   <depend>common_interfaces</depend>
-  <depend>depth_image_proc</depend>
+  <!-- <depend>depth_image_proc</depend> -->
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>protobuf</depend>
