@@ -438,6 +438,7 @@ def get_odom_from_state(
     odom_msg.pose = pose_odom_msg
     twist_odom_msg = get_odom_twist_from_state(state, spot_wrapper).twist
     odom_msg.twist = twist_odom_msg
+    odom_msg.twist.covariance = np.reshape(0.01 * np.eye(6), (36,))
     return odom_msg
 
 
@@ -472,13 +473,6 @@ def get_tf_from_state(
     tf_msg = TFMessage()
     # TODO ZACH WARNING!
     for frame_name in state.kinematic_state.transforms_snapshot.child_to_parent_edge_map:
-
-        # edit made by CDCL.
-        # we want to disconnect the 'odom' frame from 'body' frame in the tf tree, so that we can insert our own transformation between
-        # those two frames. That new transformation ignores the "pitch", "roll", and "z" components of the transformation, since those 
-        # are not needed for our applications.
-        if frame_name == 'odom':
-            continue
         if state.kinematic_state.transforms_snapshot.child_to_parent_edge_map.get(frame_name).parent_frame_name:
             try:
                 transform = state.kinematic_state.transforms_snapshot.child_to_parent_edge_map.get(frame_name)

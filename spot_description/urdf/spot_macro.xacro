@@ -59,6 +59,19 @@
             <parent link="${tf_prefix}body" />
             <child link="${tf_prefix}rear_rail" />
         </joint>
+        
+        <link name="${tf_prefix}gps">
+            <inertial>
+                <origin rpy="0. 0. 0." xyz="0. 0. 0." />
+                <mass value="1.0e-6" />
+                <inertia ixx="1.0e-9" ixy="0.0" ixz="0.0" iyy="1.0e-9" iyz="0.0" izz="1.0e-9" />
+            </inertial>
+        </link>
+        <joint name="${tf_prefix}gps_joint" type="fixed">
+            <origin xyz="-0.223 0 0.0805" rpy="0 0 0" />
+            <parent link="${tf_prefix}body" />
+            <child link="${tf_prefix}gps" />
+        </joint>        
 
         <link name="${tf_prefix}front_left_hip">
             <visual>

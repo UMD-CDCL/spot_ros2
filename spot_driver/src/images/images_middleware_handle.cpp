@@ -9,7 +9,7 @@
 #include <spot_driver/interfaces/rclcpp_wall_timer_interface.hpp>
 
 namespace {
-constexpr auto kPublisherHistoryDepth = 1;
+constexpr auto kPublisherHistoryDepth = 5;
 
 constexpr auto kImageTopicSuffix = "image";
 constexpr auto kCameraInfoTopicSuffix = "camera_info";
@@ -31,6 +31,11 @@ void ImagesMiddlewareHandle::createPublishers(const std::set<ImageSource>& image
   image_publishers_.clear();
   info_publishers_.clear();
 
+  rclcpp::QoS qos_profile = rclcpp::QoS(rclcpp::KeepLast(kPublisherHistoryDepth));
+  // qos_profile.best_effort();
+  // qos_profile.durability_volatile();
+
+
   for (const auto& image_source : image_sources) {
     // Since these topic names do not have a leading `/` character, they will be published within the namespace of the
     // node, which should match the name of the robot. For example, the topic for the front left RGB camera will
@@ -41,7 +46,7 @@ void ImagesMiddlewareHandle::createPublishers(const std::set<ImageSource>& image
 
     image_publishers_.try_emplace(image_topic_name,
                                   node_->create_publisher<sensor_msgs::msg::Image>(
-                                      image_topic_name, rclcpp::QoS(rclcpp::KeepLast(kPublisherHistoryDepth))));
+                                      image_topic_name, qos_profile));
 
     const auto info_topic_name = topic_name_base + "/" + kCameraInfoTopicSuffix;
     info_publishers_.try_emplace(info_topic_name,

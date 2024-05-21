@@ -219,6 +219,9 @@ def launch_setup(context: LaunchContext, ld: LaunchDescription) -> None:
         output="screen",
         parameters=[config_file, spot_driver_params],
         namespace=spot_name,
+        remappings=[
+            ("/" + spot_name + "/odometry", "/" + spot_name + "/odometry/local"),
+        ]
     )
     ld.add_action(spot_driver_node)
 
@@ -295,7 +298,8 @@ def launch_setup(context: LaunchContext, ld: LaunchDescription) -> None:
         condition=IfCondition(launch_rviz),
     )
 
-    ld.add_action(rviz)
+    # comment out rviz2
+    # ld.add_action(rviz)
 
     # Parse config options to create a list of composable node descriptions for the nodelets we want to run within the
     # composable node container.
@@ -303,7 +307,7 @@ def launch_setup(context: LaunchContext, ld: LaunchDescription) -> None:
         create_depth_registration_nodelets(context, spot_name, has_arm)
         if depth_registered_mode is DepthRegisteredMode.FROM_NODELETS
         else []
-    ) + (create_point_cloud_nodelets(context, spot_name, has_arm) if publish_point_clouds else [])
+    )# + (create_point_cloud_nodelets(context, spot_name, has_arm) if publish_point_clouds else [])
     container = launch_ros.actions.ComposableNodeContainer(
         name="container",
         namespace=spot_name,
@@ -312,7 +316,7 @@ def launch_setup(context: LaunchContext, ld: LaunchDescription) -> None:
         output="screen",
         composable_node_descriptions=composable_node_descriptions,
     )
-    ld.add_action(container)
+    # ld.add_action(container)
 
 
 def generate_launch_description() -> launch.LaunchDescription:
