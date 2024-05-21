@@ -287,7 +287,7 @@ def launch_setup(context: LaunchContext, ld: LaunchDescription) -> None:
         output="screen",
         namespace=spot_name,
     )
-    ld.add_action(spot_alert_node)
+    # ld.add_action(spot_alert_node)
 
     rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([FindPackageShare(THIS_PACKAGE), "/launch", "/rviz.launch.py"]),
@@ -303,20 +303,20 @@ def launch_setup(context: LaunchContext, ld: LaunchDescription) -> None:
 
     # Parse config options to create a list of composable node descriptions for the nodelets we want to run within the
     # composable node container.
-    composable_node_descriptions = (
-        create_depth_registration_nodelets(context, spot_name, has_arm)
-        if depth_registered_mode is DepthRegisteredMode.FROM_NODELETS
-        else []
-    )# + (create_point_cloud_nodelets(context, spot_name, has_arm) if publish_point_clouds else [])
-    container = launch_ros.actions.ComposableNodeContainer(
-        name="container",
-        namespace=spot_name,
-        package="rclcpp_components",
-        executable="component_container_mt",
-        output="screen",
-        composable_node_descriptions=composable_node_descriptions,
-    )
-    # ld.add_action(container)
+    # composable_node_descriptions = (
+    #     create_depth_registration_nodelets(context, spot_name, has_arm)
+    #     if depth_registered_mode is DepthRegisteredMode.FROM_NODELETS
+    #     else []
+    # )# + (create_point_cloud_nodelets(context, spot_name, has_arm) if publish_point_clouds else [])
+    # container = launch_ros.actions.ComposableNodeContainer(
+    #     name="container",
+    #     namespace=spot_name,
+    #     package="rclcpp_components",
+    #     executable="component_container_mt",
+    #     output="screen",
+    #     composable_node_descriptions=composable_node_descriptions,
+    # )
+    # # ld.add_action(container)
 
 
 def generate_launch_description() -> launch.LaunchDescription:
