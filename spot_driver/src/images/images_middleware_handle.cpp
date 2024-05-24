@@ -32,6 +32,7 @@ void ImagesMiddlewareHandle::createPublishers(const std::set<ImageSource>& image
   info_publishers_.clear();
 
   rclcpp::QoS qos_profile = rclcpp::QoS(rclcpp::KeepLast(kPublisherHistoryDepth));
+  // qos_profile.reliable(); // it WAS best effort, but i think it might have to be reliable?
   // qos_profile.best_effort();
   // qos_profile.durability_volatile();
 
@@ -51,7 +52,7 @@ void ImagesMiddlewareHandle::createPublishers(const std::set<ImageSource>& image
     const auto info_topic_name = topic_name_base + "/" + kCameraInfoTopicSuffix;
     info_publishers_.try_emplace(info_topic_name,
                                  node_->create_publisher<sensor_msgs::msg::CameraInfo>(
-                                     info_topic_name, rclcpp::QoS(rclcpp::KeepLast(kPublisherHistoryDepth))));
+                                     info_topic_name, qos_profile));
   }
 }
 
